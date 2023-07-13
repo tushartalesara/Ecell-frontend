@@ -1,57 +1,76 @@
-import React, { useState } from 'react'
-import './App.css';
-import axios from 'axios'
+import React, { useState } from "react";
+import "./App.css";
+// import axios from "axios";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "./firebase/config";
 
 function App() {
-
   /* React hooks for each attribute */
-  const [name,setName]=useState('')
-  const [branch,setBranch]=useState('')
-  const [email,setEmail]=useState('')
-  const [number,setNumber]=useState('')
+  const [name, setName] = useState("");
+  const [branch, setBranch] = useState("");
+  const [email, setEmail] = useState("");
+  const [number, setNumber] = useState("");
 
   /* Function to handle submit */
-  const handleSubmit=(e)=>{
-    e.preventDefault()
+  const handleSubmit =  (e) => {
+    e.preventDefault();
 
     //Data
-    const data={
-      name:name,
-      branch:branch,
-      email:email,
-      number:number
-    }
+    const data = {
+      name: name,
+      branch: branch,
+      email: email,
+      number: number,
+    };
+    console.log(data);
+    const docRef =  setDoc(doc(db, "TusharCSE",data.name+data.email), data);
+    console.log(docRef);
 
     /* Sending the data to backend (FireBase) */
-    axios.post('http://localhost:5000/submit',data)
-          .then((res)=>{
-            console.log(res)
-          })
-          .catch((err)=>{
-            console.log(err)
-          })
+    // axios.post('http://localhost:5000/submit',data)
+    //       .then((res)=>{
+    //         console.log(res)
+    //       })
+    //       .catch((err)=>{
+    //         console.log(err)
+    //       })
 
     /* Creating a new object to store the data */
-    setName('')
-    setBranch('')
-    setEmail('')
-    setNumber('')
-  }
+    setName("");
+    setBranch("");
+    setEmail("");
+    setNumber("");
+  };
 
   return (
     <div className="container">
-      <form className="form" onSubmit={handleSubmit} action='POST'>
+      <form className="form" onSubmit={handleSubmit} action="POST">
         <h1>Form</h1>
         <ul className="form-list">
           <li className="form-item">
             <label htmlFor="name">Name *</label>
-            <input type="text" id="name" onChange={(e)=>{setName(e.target.value)}} value={name} required />
+            <input
+              type="text"
+              id="name"
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+              value={name}
+              required
+            />
           </li>
           <li className="form-item">
             <label htmlFor="branch">Branch *</label>
-            <select id="branch" value={branch} onChange={(e)=>{setBranch(e.target.value)}} required>
+            <select
+              id="branch"
+              value={branch}
+              onChange={(e) => {
+                setBranch(e.target.value);
+              }}
+              required
+            >
               <option hidden />
-              <option>	Architecture , Planning and Design</option>
+              <option> Architecture , Planning and Design</option>
               <option>Bio-Chemical Engineering</option>
               <option>Bio-Medical Engineering</option>
               <option>Ceramic Engineering and Technology</option>
@@ -72,13 +91,31 @@ function App() {
           </li>
           <li className="form-item">
             <label htmlFor="email">Email *</label>
-            <input type="text" id="email" onChange={(e)=>{setEmail(e.target.value)}} value={email} required />
+            <input
+              type="text"
+              id="email"
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              value={email}
+              required
+            />
           </li>
           <li className="form-item">
             <label htmlFor="number">Number *</label>
-            <input type='text' id="number" onChange={(e)=>{setNumber(e.target.value)}} value={number} required />
+            <input
+              type="text"
+              id="number"
+              onChange={(e) => {
+                setNumber(e.target.value);
+              }}
+              value={number}
+              required
+            />
           </li>
-          <button className="btn" type='submit'>Submit</button>
+          <button className="btn" type="submit">
+            Submit
+          </button>
         </ul>
       </form>
     </div>
